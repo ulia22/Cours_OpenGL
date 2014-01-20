@@ -1,0 +1,57 @@
+#include "Point.hpp"
+
+Point::Point() : x(0.0), y(0.0), z(0.0)
+{}
+Point::Point(const double x, const double y, const double z) : x(x), y(y), z(z)
+{}
+Point::Point(const Point& p) : x(p.x), y(p.y), z(p.z)
+{}
+
+Point Point::ProjectOnLine(Point p1, Point p2){
+	double normeProj;
+	Vector p1This (this->getX() - p1.getX(), this->getY() - p1.getY(), this->getZ() - p1.getZ());
+	Vector p1p2 (p1.getX() - p2.getX(), p1.getY() - p2.getY(), p1.getZ() - p2.getZ());
+
+	normeProj = (p1This.scalar(p1p2)/ p1p2.norme());
+	p1p2.normalize();
+
+	return Point(p1.getX() + p1p2.getX() * normeProj, p1.getY() + p1p2.getY() * normeProj, p1.getZ() + p1p2.getZ() * normeProj);
+}
+
+
+Point Point::ProjectOnLine(Point p, Vector v){
+	double normeProj;
+	Vector copieV(v);
+	Vector pThis(this->getX() - p.getX(), this->getY() - p.getY(), this->getZ() - p.getZ());
+
+	normeProj = (pThis.scalar(copieV)/v.norme());
+	copieV.normalize();
+
+	return Point(p.getX() + copieV.getX() * normeProj, p.getY() + copieV.getY() * normeProj, p.getZ() + copieV.getZ() * normeProj);
+}
+
+Point Point::ProjectOnPlane(Point pPlane, Vector normal){
+	double normeProj;
+	Vector pPlaneThis(this->getX() - pPlane.getX(), this->getY() - pPlane.getY(), this->getZ() - pPlane.getZ());
+	Vector copieNormal(normal);
+
+	normeProj = (pPlaneThis.scalar(copieNormal)/ copieNormal.norme());
+	copieNormal.normalize();
+
+	return Point(this->getX() - copieNormal.getX() * normeProj, this->getY() + copieNormal.getY() * normeProj, this->getZ() + copieNormal.getZ() * normeProj);
+}
+
+bool operator== (const Point& p) const{
+	if(this->getX() == p.getX() && this->getY() == p.getY() && this->getZ() == p.getZ()){
+		return true;
+	}
+	return false;
+}
+
+double Point::getX(){return this->x;}
+double Point::getY(){return this->y;}
+double Point::getZ(){return this->z;}
+
+void Point::setX(double x){this->x = x;}
+void Point::setY(double y){this->y = y;}
+void Point::setZ(double z){this->z = z;}
