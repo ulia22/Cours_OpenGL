@@ -3,30 +3,27 @@
 #include "Point.hpp"
 #include <vector>
 
+using namespace std;
 
 class Bezier
 {
 private:
 	vector<Point> tabControlPoint;
-	long nbControlPoint;
-	long nbU;
 
 	vector<Point> bezierCurve;
 public:
 	Bezier(void);
-	Bezier(const vector<Point> tabControlPoint, const long nbControlPoint, const long nbU);
-	Bezier(const &Bezier b);
+	Bezier(const vector<Point> tabControlPoint);
+	Bezier(const Bezier& b);
 
-	vector<Point> HermiteCubicCurve(vector<Point> myCurve, long nbU);
+	vector<Point> bezierByBernstein(long nbU);
+	Point getPointByBernstein(double u);
+	double getValBernsteinPoly(double u, long i, long n);
+	vector<Point> bezierByCastlejau(long nbU);
+	Point getPointCastlejau(vector<Point> list, double u);
 
 	vector<Point> getTabControlPoint(void);
 	void setTabControlPoint(vector<Point> p);
-
-	long getNbControlPoint(void);
-	void setNbControlPoint(long n);
-
-	long getNbU(void);
-	void setNbU(long nbu);
 
 	vector<Point> getBezierCurve(void);
 	void setBezierCurve(vector<Point> curve);

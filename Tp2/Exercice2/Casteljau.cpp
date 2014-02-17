@@ -37,39 +37,3 @@ Point getCastlejauPoint(vector<vector<Point> > ptsControl, double s, double t){
 	//return getCastlejauPoint(res, s, t);
 	return Pij10;
 }
-
-int main(){
-
-	Point P00(0,0,0), P01(0,1,0), P02(0,2,0);
-	Point P10(1,0,0), P11(1,1,1), P12(1,2,1);
-	Point P20(2,0,0), P21(2,1,1), P22(2,2,1);
-	Point P30(3,0,0), P31(3,1,0), P32(3,2,0);
-	vector<Point> v00, v10, v20, v30;
-	v00.push_back(P00);
-	v00.push_back(P01);
-	v00.push_back(P02);
-
-	v10.push_back(P10);
-	v10.push_back(P11);
-	v10.push_back(P12);
-
-	v20.push_back(P20);
-	v20.push_back(P21);
-	v20.push_back(P22);
-
-	v30.push_back(P30);
-	v30.push_back(P31);
-	v30.push_back(P32);
-
-	vector<vector<Point> > ptsControl;
-	ptsControl.push_back(v00);
-	ptsControl.push_back(v10);
-	ptsControl.push_back(v20);
-	ptsControl.push_back(v30);
-
-	double s = 0.25, t = 0.50;
-
-	cout << " X = " << getCastlejauPoint(ptsControl, s, t).getX() << " Y = " << getCastlejauPoint(ptsControl, s, t).getY()<< " Z = " << getCastlejauPoint(ptsControl, s, t).getZ() << endl;
-
-	return 0;
-}

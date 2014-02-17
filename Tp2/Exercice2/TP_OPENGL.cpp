@@ -18,6 +18,7 @@
 #include "Point.hpp"
 #include "Hermite.hpp"
 #include "Casteljau.hpp"
+#include "Bezier.hpp"
 
 
 /* Dans les salles de TP, vous avez généralement accès aux glut dans C:\Dev. Si ce n'est pas le cas, téléchargez les .h .lib ...
@@ -52,8 +53,10 @@ GLvoid window_key(unsigned char key, int x, int y);
 void myGlVertex(Point v);
 void displayLine(Point p, Vector v);
 void drawCurve(Point TabPointsOfCurve[], long nbPoints);
+void drawCurve(vector<Point> points);
+void myMouse (int button, int state, int x, int y);
 
-/*int main(int argc, char **argv) 
+int main(int argc, char **argv) 
 {  
   // initialisation  des paramètres de GLUT en fonction
   // des arguments sur la ligne de commande
@@ -76,11 +79,13 @@ void drawCurve(Point TabPointsOfCurve[], long nbPoints);
   glutReshapeFunc(&window_reshape);
   // la gestion des événements clavier
   glutKeyboardFunc(&window_key);
+  //Mouse
+  glutMouseFunc(&myMouse);
 
   // la boucle prinicipale de gestion des événements utilisateur
-  glutMainLoop();  
+  glutMainLoop();
 
-  return 1;
+  return 0;
 }//*/
 
 // initialisation du fond de la fenêtre graphique : noir opaque
@@ -122,7 +127,7 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
   // ici, vous verrez pendant le cours sur les projections qu'en modifiant les valeurs, il est
   // possible de changer la taille de l'objet dans la fenêtre. Augmentez ces valeurs si l'objet est 
   // de trop grosse taille par rapport à la fenêtre.
-  glOrtho(-10.0, 10.0, -10.0, 10.0, -10.0, 10.0);
+  glOrtho(-3.0, 3.0, -3.0, 3.0, -3.0, 3.0);
 
   // toutes les transformations suivantes s´appliquent au modèle de vue 
   glMatrixMode(GL_MODELVIEW);
@@ -155,7 +160,7 @@ void render_scene()
   //  Nous créons ici un polygone. Nous pourrions aussi créer un triangle ou des lignes. Voir ci-dessous les parties 
   // en commentaires (il faut commenter le bloc qui ne vous intéresse pas et décommenter celui que vous voulez tester.
 
-	Point A(-0.0, -0.0, 0.0);
+	/*Point A(-0.0, -0.0, 0.0);
 	Point B(2.0, 0.0, 0.0);
 	Vector v1(1.0, 1.0, 0.0);
 	Vector v2(1.0, -1.0, 0.0);
@@ -173,7 +178,7 @@ void render_scene()
 	Hermite myCurve(A, v1, B, v2);
 	Point curve[10];
 	myCurve.HermiteCubicCurve(curve ,10);
-	drawCurve(curve, 10);
+	drawCurve(curve, 10);//*/
 
 
 
@@ -182,6 +187,7 @@ void render_scene()
 	Point P10(1,0,0), P11(1,1,1), P12(1,2,1);
 	Point P20(2,0,0), P21(2,1,1), P22(2,2,1);
 	Point P30(3,0,0), P31(3,1,0), P32(3,2,0);
+
 	vector<Point> v00, v10, v20, v30;
 	v00.push_back(P00);
 	v00.push_back(P01);
@@ -208,8 +214,28 @@ void render_scene()
 
 	double s = 0.25, t = 0.50;
 
-	cout << " X = " << getCastlejauPoint(ptsControl, 2, 3, s, t).getX() << " Y = " << getCastlejauPoint(ptsControl, 2, 3, s, t).getY()<< " Z = " << getCastlejauPoint(ptsControl, 2, 3, s, t).getZ() << endl;
-*/
+	//cout << " X = " << getCastlejauPoint(ptsControl, s, t).getX() << " Y = " << getCastlejauPoint(ptsControl, s, t).getY()<< " Z = " << getCastlejauPoint(ptsControl, s, t).getZ() << endl;
+	*/
+
+	//Bernstein
+	/*Point p1(0.0, 0.0, 0.0), p2(1.0, 0.0, 0.0), p3(1.0, 1.0, 0.0);
+	vector<Point> v;
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+
+	Bezier bCurve = Bezier(v);
+	drawCurve(bCurve.bezierByBernstein(10));*/
+
+	Point A(0.0, 0.0, 0.0), B(-2.0, -2.0, -2.0), C(2.0, 2.0, 2.0);
+	glBegin(GL_POINTS);
+		myGlVertex(A);
+		myGlVertex(B);
+		myGlVertex(C);
+	glEnd();
+
+
+
 }
 
 void myGlVertex(Point v){
@@ -232,4 +258,17 @@ void drawCurve(Point TabPointsOfCurve[], long nbPoints){
 		myGlVertex(TabPointsOfCurve[i]);
 	}
 	glEnd();
+}
+
+void drawCurve(vector<Point> points){
+	glBegin(GL_LINE_STRIP);
+	for(unsigned int i = 0; i < points.size(); ++i){
+		myGlVertex(points[i]);
+	}
+	glEnd();
+}
+
+
+void myMouse (int button, int state, int x, int y){
+	cout << "X : " << x << " Y : " << y <<endl;
 }
