@@ -20,6 +20,7 @@
 #include "Hermite.hpp"
 #include "Casteljau.hpp"
 #include "Bezier.hpp"
+#include "SurfaceParam.hpp"
 
 
 /* Dans les salles de TP, vous avez généralement accès aux glut dans C:\Dev. Si ce n'est pas le cas, téléchargez les .h .lib ...
@@ -71,10 +72,14 @@ Point* selected;
 int main(int argc, char **argv) 
 { 
 	Point p1(0.0, 0.0, 0.0), p2(1.0, 0.0, 0.0), p3(1.0, 1.0, 0.0);
+	Point p4(1.0, 1.0, 0.0), p5(2.0, 1.0, 0.0), p6(2.0, 2.0, 0.0);
 	
 	pts.push_back(p1);
 	pts.push_back(p2);
 	pts.push_back(p3);
+	pts.push_back(p4);
+	pts.push_back(p5);
+	pts.push_back(p6);
 	selected = NULL;
 
 
@@ -195,6 +200,23 @@ void render_scene()
 	Bezier bCurve = Bezier(v);
 	drawCurve(bCurve.bezierByBernstein(10));
 
+
+	glBegin(GL_POINTS);
+		myGlVertex(pts.at(3));
+		myGlVertex(pts.at(4));
+		myGlVertex(pts.at(5));
+	glEnd();
+
+	vector<Point> v2;
+	v2.push_back(pts.at(3));
+	v2.push_back(pts.at(4));
+	v2.push_back(pts.at(5));
+	Bezier bCurve2 = Bezier(v2);
+	drawCurve(bCurve2.bezierByBernstein(10));
+
+	SurfaceParam s(bCurve.getBezierCurve(), bCurve2.getBezierCurve(), 10);
+	s.computeSurface();
+	s.displaySurface();
 }
 
 void myGlVertex(Point v){
@@ -240,7 +262,7 @@ void myMouse (int button, int state, int x, int y){
 
 		cout << "X = " << ortho_M_X << " Y = " << ortho_M_Y << endl;
 		double dist = 0;
-		for(int i = 0; i < pts.size(); i++){
+		for(unsigned int i = 0; i < pts.size(); i++){
 			dist = sqrt(pow(pts.at(i).getX() - ortho_M_X, 2) + pow(pts.at(i).getY() - ortho_M_Y, 2));
 			cout << "Distance " << dist <<endl;
 			if(dist <= 0.5){
