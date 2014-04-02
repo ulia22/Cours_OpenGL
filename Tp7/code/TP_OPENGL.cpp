@@ -37,12 +37,12 @@ Si vous mettez glut dans le répertoire courant, on aura alors #include "glut.h"
 #define WIDTH  480
 #define HEIGHT 480
 
-#define ORTHO_X_L -25.0
-#define ORTHO_X_U 25.0
-#define ORTHO_Y_L -25.0
-#define ORTHO_Y_U 25.0
-#define ORTHO_Z_L -25.0
-#define ORTHO_Z_U 25.0
+#define ORTHO_X_L -0.11
+#define ORTHO_X_U 0.11
+#define ORTHO_Y_L -0.11
+#define ORTHO_Y_U 0.11
+#define ORTHO_Z_L -0.11
+#define ORTHO_Z_U 0.11
 
 // Définition de la couleur de la fenêtre
 #define RED   0
@@ -71,10 +71,21 @@ void myMouse (int button, int state, int x, int y);
 
 vector<Point> pts;
 Point* selected;
+double* rotate;
+
+FromFile file;
 
 int main(int argc, char **argv) 
 { 
 
+	rotate = new double[4];
+	rotate[0] = 0.0;
+	rotate[1] = 0.0;
+	rotate[2] = 0.0;
+	rotate[3] = 0.0;
+	file = FromFile();
+	
+	file.displayFileOFF(argv[1]);
   // initialisation  des paramètres de GLUT en fonction
   // des arguments sur la ligne de commande
   glutInit(&argc, argv);
@@ -118,6 +129,8 @@ GLvoid initGL()
 // à initialiser
 void init_scene()
 {
+
+
 }
 
 // fonction de call-back pour l´affichage dans la fenêtre
@@ -126,16 +139,17 @@ GLvoid window_display()
 {
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //gluLookAt(0., 0., 0., 0., 0., 0., 0., 0., 0.);
+  
   int MatSpec [4] = {1,1,1,1};
   glMaterialiv(GL_FRONT_AND_BACK,GL_SPECULAR,MatSpec); 
   
-  glEnable(GL_LIGHTING); 	// Active l'éclairage
+  //glEnable(GL_LIGHTING); 	// Active l'éclairage
   glEnable(GL_LIGHT0);
   
   glLoadIdentity();
   
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glMatrixMode(GL_MODELVIEW);
 	
 	glEnable(GL_CULL_FACE);
@@ -146,7 +160,7 @@ GLvoid window_display()
   // à une fonction (render_scene() ici) qui contient les informations 
   // que l'on veut dessiner
   render_scene();
-	
+
   // trace la scène grapnique qui vient juste d'être définie
   glFlush();
 }
@@ -162,7 +176,16 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
   // ici, vous verrez pendant le cours sur les projections qu'en modifiant les valeurs, il est
   // possible de changer la taille de l'objet dans la fenêtre. Augmentez ces valeurs si l'objet est 
   // de trop grosse taille par rapport à la fenêtre.
-  glOrtho(ORTHO_X_L, ORTHO_X_U, ORTHO_Y_L, ORTHO_Y_U, ORTHO_Z_L, ORTHO_Z_U);
+
+
+ // glOrtho(ORTHO_X_L, ORTHO_X_U, ORTHO_Y_L, ORTHO_Y_U, ORTHO_Z_L, ORTHO_Z_U);
+	if(file.getFPath() == "../buddha.off"){
+		glOrtho(ORTHO_X_L, ORTHO_X_U, ORTHO_Y_L, ORTHO_Y_U, ORTHO_Z_L, ORTHO_Z_U);
+	}else if (file.getFPath() == "../max.off"){
+		glOrtho(-150.0, 150.0, -150.0, 150.0, -1500.0, 1500.0);
+	}else{
+		glOrtho(-25.0, 25.0, -25.0, 25.0, -1500.0, 1500.0);
+	}
 
   // toutes les transformations suivantes s´appliquent au modèle de vue 
   glMatrixMode(GL_MODELVIEW);
@@ -171,11 +194,28 @@ GLvoid window_reshape(GLsizei width, GLsizei height)
 // fonction de call-back pour la gestion des événements clavier
 
 GLvoid window_key(unsigned char key, int x, int y) 
-{  
+{ 
+  rotate[2] = 1.0;
   switch (key) {    
   case KEY_ESC:  
     exit(1);                    
     break;
+
+  case GLUT_KEY_UP:
+  break;
+
+  case GLUT_KEY_DOWN:
+  break;
+
+  case  GLUT_KEY_LEFT:
+  	rotate[0]++;
+  	cout << "ttest"<<endl;
+  break;
+
+  case GLUT_KEY_RIGHT:
+  	rotate[0]--;
+  break;
+
   default:
     printf ("La touche %d n´est pas active.\n", key);
     break;
@@ -191,9 +231,25 @@ void render_scene()
 {
 //Définition de la couleur
 	glColor3f(0.0, 0.0, 1.0);
-	FromFile file = FromFile();
-	
-	file.displayFileOFF("../MeshSegmentation.off");
+
+	GLfloat* v = file.getVertex();
+	GLuint* t = file.getTriangles();
+
+	if(file.getFPath() == "../buddha.off"){
+		glTranslatef(0, -0.15, 0);
+		glRotatef(60.0, 0.0, 1.0, 0.0);
+	}else if (file.getFPath() == "../max.off"){
+		glTranslatef(22, 0.0, 0);
+		glRotatef(180.0, 0.0, 1.0, 0.0);
+	}else{
+		glRotatef(120.0, 1.0, 0.0, 0.0);
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, v);
+	glDrawElements(GL_TRIANGLES, file.getNbTriangle()*3, GL_UNSIGNED_INT, t);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
 }
 
 void myGlVertex(Point v){

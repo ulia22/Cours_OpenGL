@@ -37,12 +37,12 @@ Si vous mettez glut dans le répertoire courant, on aura alors #include "glut.h"
 #define WIDTH  480
 #define HEIGHT 480
 
-#define ORTHO_X_L -0.11
-#define ORTHO_X_U 0.11
-#define ORTHO_Y_L -0.11
-#define ORTHO_Y_U 0.11
-#define ORTHO_Z_L -0.11
-#define ORTHO_Z_U 0.11
+#define ORTHO_X_L -0.01
+#define ORTHO_X_U 0.01
+#define ORTHO_Y_L -0.01
+#define ORTHO_Y_U 0.01
+#define ORTHO_Z_L -0.01
+#define ORTHO_Z_U 0.01
 
 // Définition de la couleur de la fenêtre
 #define RED   0
@@ -118,6 +118,8 @@ GLvoid initGL()
 // à initialiser
 void init_scene()
 {
+
+
 }
 
 // fonction de call-back pour l´affichage dans la fenêtre
@@ -126,7 +128,7 @@ GLvoid window_display()
 {
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //gluLookAt(0., 0., 0., 0., 0., 0., 0., 0., 0.);
+  
   int MatSpec [4] = {1,1,1,1};
   glMaterialiv(GL_FRONT_AND_BACK,GL_SPECULAR,MatSpec); 
   
@@ -193,7 +195,7 @@ void render_scene()
 	glColor3f(0.0, 0.0, 1.0);
 	FromFile file = FromFile();
 	
-	file.displayFileOFF("../MeshSegmentation.off");
+	file.displayFileOFF("../buddha.off");
 }
 
 void myGlVertex(Point v){

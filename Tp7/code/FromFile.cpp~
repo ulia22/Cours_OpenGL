@@ -48,19 +48,9 @@ void FromFile::displayFileOFF(string path){
 		}
 		
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glTranslatef(0, -0.15, 0);
+		glTranslatef(0, -0.133, 0);
 		glVertexPointer(3, GL_FLOAT, 0, vertex);
-		//glDrawElements(GL_TRIANGLES, nbTriangle*3, GL_UNSIGNED_INT, triangles);
-		//glDrawElements(GL_LINE_STRIP, nbTriangle*3, GL_UNSIGNED_INT, triangles);
-		
-		for(long i = 0; i < nbTriangle; i++){
-			glBegin(GL_LINE_STRIP);
-				glVertex3f(vertex[triangles[i*3+0]+0], vertex[triangles[i*3+0]+1], vertex[triangles[i*3+0]+2]);
-				glVertex3f(vertex[triangles[i*3+1]+0], vertex[triangles[i*3+1]+1], vertex[triangles[i*3+1]+2]);
-				glVertex3f(vertex[triangles[i*3+2]+0], vertex[triangles[i*3+2]+1], vertex[triangles[i*3+2]+2]);
-				glVertex3f(vertex[triangles[i*3+0]+0], vertex[triangles[i*3+0]+1], vertex[triangles[i*3+0]+2]);
-			glEnd();
-		}
+		glDrawElements(GL_TRIANGLES, nbTriangle*3, GL_UNSIGNED_INT, triangles);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		delete[] vertex;
 		delete[] triangles;
@@ -69,5 +59,3 @@ void FromFile::displayFileOFF(string path){
 		cerr << "Impossible d'ouvrir le fichier !" << endl;
 	}
 }
-
-
