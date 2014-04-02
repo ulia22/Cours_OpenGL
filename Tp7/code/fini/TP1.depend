@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1390217619 source:/auto_home/cpeladan/Documents/3D/TP1/src/Point.cpp
+	"Point.h"
+
+1390217287 /auto_home/cpeladan/Documents/3D/TP1/include/Point.h
+	"Vector.h"
+
+1390217878 /auto_home/cpeladan/Documents/3D/TP1/include/Vector.h
+
+1390214085 source:/auto_home/cpeladan/Documents/3D/TP1/src/TP_OPENGL.cpp
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<GL/glut.h>
+

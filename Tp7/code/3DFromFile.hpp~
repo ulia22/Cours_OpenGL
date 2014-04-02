@@ -1,0 +1,14 @@
+#ifndef 3DFROMFILE_HPP
+#define 3DFROMFILE_HPP
+#include <string>
+using namespace std;
+
+class 3DFromFile
+{
+private:
+public:
+	3DFromFile();
+
+	void displayFileOFF(string path);
+};
+#endif

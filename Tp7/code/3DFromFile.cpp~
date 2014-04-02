@@ -1,0 +1,5 @@
+#include "3DFromFile.hpp"
+
+3DFromFile::3DFromFile(){}
+
+void 3DFromFile::displayFileOFF(string path){}

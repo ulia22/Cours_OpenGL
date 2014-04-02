@@ -74,17 +74,6 @@ Point* selected;
 
 int main(int argc, char **argv) 
 { 
-	Point p1(0.0, 0.0, 0.0), p2(1.0, 0.0, 0.0), p3(1.0, 1.0, 0.0);
-	Point p4(1.0, 1.0, 0.0), p5(2.0, 1.0, 0.0), p6(2.0, 2.0, 0.0);
-	
-	pts.push_back(p1);
-	pts.push_back(p2);
-	pts.push_back(p3);
-	pts.push_back(p4);
-	pts.push_back(p5);
-	pts.push_back(p6);
-	selected = NULL;
-
 
   // initialisation  des paramètres de GLUT en fonction
   // des arguments sur la ligne de commande
@@ -109,7 +98,7 @@ int main(int argc, char **argv)
   glutKeyboardFunc(&window_key);
 
   //Mouse
-  glutMouseFunc(&myMouse);
+  //glutMouseFunc(&myMouse);
 
   // la boucle prinicipale de gestion des événements utilisateur
   glutMainLoop();
@@ -120,27 +109,46 @@ int main(int argc, char **argv)
 // initialisation du fond de la fenêtre graphique : noir opaque
 GLvoid initGL() 
 {
-  glClearColor(RED, GREEN, BLUE, ALPHA);        
+
+  glClearColor(RED, GREEN, BLUE, ALPHA);    
+  glEnable(GL_DEPTH_TEST);
 }
 
 // Initialisation de la scene. Peut servir à stocker des variables de votre programme
 // à initialiser
 void init_scene()
 {
+
+
 }
 
 // fonction de call-back pour l´affichage dans la fenêtre
 
 GLvoid window_display()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
-  glLoadIdentity();
 
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
+  int MatSpec [4] = {1,1,1,1};
+  glMaterialiv(GL_FRONT_AND_BACK,GL_SPECULAR,MatSpec); 
+  
+  glEnable(GL_LIGHTING); 	// Active l'éclairage
+  glEnable(GL_LIGHT0);
+  
+  glLoadIdentity();
+  
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glMatrixMode(GL_MODELVIEW);
+	
+	glEnable(GL_CULL_FACE);
+	
+	
+	
   // C'est l'endroit où l'on peut dessiner. On peut aussi faire appel
   // à une fonction (render_scene() ici) qui contient les informations 
   // que l'on veut dessiner
   render_scene();
-
+	
   // trace la scène grapnique qui vient juste d'être définie
   glFlush();
 }
@@ -184,48 +192,7 @@ GLvoid window_key(unsigned char key, int x, int y)
 void render_scene()
 {
 //Définition de la couleur
- glColor3f(1.0, 1.0, 1.0);
- glRotatef(0.0f, 0.0f, 0.0f, 0.0f);
-
-  //  Nous créons ici un polygone. Nous pourrions aussi créer un triangle ou des lignes. Voir ci-dessous les parties 
-  // en commentaires (il faut commenter le bloc qui ne vous intéresse pas et décommenter celui que vous voulez tester.
-	//Bernstein
-	/*glBegin(GL_POINTS);
-		myGlVertex(pts.at(0));
-		myGlVertex(pts.at(1));
-		myGlVertex(pts.at(2));
-	glEnd();
-
-	vector<Point> v;
-	v.push_back(pts.at(0));
-	v.push_back(pts.at(1));
-	v.push_back(pts.at(2));
-
-	Bezier bCurve = Bezier(v);
-	drawCurve(bCurve.bezierByBernstein(10));
-
-
-	glBegin(GL_POINTS);
-		myGlVertex(pts.at(3));
-		myGlVertex(pts.at(4));
-		myGlVertex(pts.at(5));
-	glEnd();
-
-	vector<Point> v2;
-	v2.push_back(pts.at(3));
-	v2.push_back(pts.at(4));
-	v2.push_back(pts.at(5));
-	Bezier bCurve2 = Bezier(v2);
-	drawCurve(bCurve2.bezierByBernstein(10));
-
-	SurfaceParam s(bCurve.getBezierCurve(), bCurve2.getBezierCurve(), 10);
-	s.computeSurface();
-	s.displaySurface();*/
-	/*Sphere s = Sphere();
-	s.display(10,10);
-	s.displayVolCube();*/
-	
-	
+	glColor3f(0.0, 0.0, 1.0);
 	FromFile file = FromFile();
 	
 	file.displayFileOFF("../buddha.off");
